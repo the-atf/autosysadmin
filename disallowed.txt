@@ -1,0 +1,7 @@
+nmap
+wireshark
+ettercap
+john the ripper
+aircrack-ng
+metasploit
+hydra
