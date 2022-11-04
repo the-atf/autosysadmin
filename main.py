@@ -16,7 +16,7 @@ else:
     print("This script is only for Debian/Ubuntu\n")
     sys.exit(1)
 
-subprocess.call(["apt", "install", "net-tools", "-y"], shell=True)
+subprocess.call("apt install net-tools -y", shell=True)
 
 #check users.txt, cross reference with /etc/passwd, if any extra users.txt are found, print username.
 try:
@@ -87,11 +87,11 @@ except:
 
 #run apt update
 print("Running apt update", shell=True)
-subprocess.call(["apt", "update"], shell=True)
+subprocess.call("apt update", shell=True)
 
 #run apt upgrade
 print("Running apt upgrade")
-subprocess.call(["apt", "upgrade", "-y"], shell=True)
+subprocess.call("apt upgrade -y", shell=True)
 
 #install ufw
 print("Installing ufw")
