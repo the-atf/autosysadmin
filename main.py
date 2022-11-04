@@ -102,6 +102,8 @@ subprocess.call(["systemctl", "enable", "ufw"])
 #find media files, if any are found, print file name and path
 print("Searching for media files\n")
 
+
+
 subprocess.call("locate *.mp3 > media.txt", shell=True)
 subprocess.call("locate *.mp4 > media.txt", shell=True)
 subprocess.call("locate *.webm > media.txt", shell=True)
