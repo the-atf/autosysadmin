@@ -16,7 +16,7 @@ else:
     print("This script is only for Debian/Ubuntu\n")
     sys.exit(1)
 
-subprocess.call(["apt", "install", "net-tools", "-y"])
+subprocess.call(["apt", "install", "net-tools", "-y"], shell=True)
 
 #check users.txt, cross reference with /etc/passwd, if any extra users.txt are found, print username.
 try:
@@ -36,7 +36,7 @@ for user in users:
 #check for unathorized admin users
 
 for admin in admins:
-    if admin not in subprocess.call("getent group sudo | cut -d: -f4"):
+    if admin not in subprocess.call("getent group sudo | cut -d: -f4", shell=True):
         print("Unauthorized admin user found: " + admin)
 
 #check for disallowed packages, I.E, hacking tools, etc.
@@ -48,7 +48,7 @@ try:
         for package in disallowed:
             if package in installed:
                 print("Package " + package + " is installed")
-                subprocess.call("apt remove " + package + " -y")
+                subprocess.call("apt remove " + package + " -y", shell=True)
                 sys.exit(1)
 except:
     print("installed.txt not found (script error?)")
@@ -61,7 +61,7 @@ try:
         for package in packages:
             if package not in installed:
                 print("Package " + package + " not found")
-                subprocess.call("apt install " + package + " -y")
+                subprocess.call("apt install " + package + " -y", shell=True)
 except:
     print(exception)
     print("packages.txt not found\n")
@@ -87,18 +87,18 @@ except:
 
 #run apt update
 print("Running apt update")
-subprocess.call(["apt", "update"])
+subprocess.call(["apt", "update"], shell=True)
 
 #run apt upgrade
 print("Running apt upgrade")
-subprocess.call(["apt", "upgrade", "-y"])
+subprocess.call(["apt", "upgrade", "-y"], shell=True)
 
 #install ufw
 print("Installing ufw")
-subprocess.call(["apt", "install", "ufw", "-y"])
-subprocess.call(["ufw", "enable"])
-subprocess.call(["ufw", "allow", "ssh"])
-subprocess.call(["systemctl", "enable", "ufw"])
+subprocess.call(["apt", "install", "ufw", "-y"], shell=True)
+subprocess.call(["ufw", "enable"], shell=True)
+subprocess.call(["ufw", "allow", "ssh"], shell=True)
+subprocess.call(["systemctl", "enable", "ufw"], shell=True)
 
 #find media files, if any are found, print file name and path
 print("Searching for media files\n")
@@ -120,8 +120,8 @@ except:
 
 #when done, install clamav and run clamscan
 print("Installing clamav")
-subprocess.call(["apt", "install", "clamav", "-y"])
+subprocess.call(["apt", "install", "clamav", "-y"], shell=True)
 print("Running clamscan")
-subprocess.call(["clamscan", "-r", "/"])
+subprocess.call(["clamscan", "-r", "/"], shell=True)
 
 
