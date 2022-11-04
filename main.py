@@ -40,7 +40,7 @@ for admin in admins:
         print("Unauthorized admin user found: " + admin)
 
 #check for disallowed packages, I.E, hacking tools, etc.
-subprocess.call("apt list --installed > installed.txt")
+subprocess.call("apt list --installed > installed.txt", shell=True)
 try:
     with open("installed.txt") as f:
         installed = f.read().splitlines()
@@ -48,7 +48,7 @@ try:
         for package in disallowed:
             if package in installed:
                 print("Package " + package + " is installed")
-                subprocess.call("apt remove " + package + " -y", shell=True)
+                subprocess.call("apt remove " + package + " -y")
                 sys.exit(1)
 except:
     print("installed.txt not found (script error?)")
