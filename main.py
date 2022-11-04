@@ -6,15 +6,17 @@ import subprocess
 
 #check if user is root
 if os.geteuid() != 0:
-    print("You need to have root privileges to run this script.")
+    print("You need to have root privileges to run this script.\n")
     sys.exit(1)
 
 #check what OS is running, if not debian/ubuntu, print error and exit
 if os.path.exists("/etc/debian_version"):
-    print("Debian/Ubuntu detected")
+    print("Debian/Ubuntu detected\n")
 else:
-    print("This script is only for Debian/Ubuntu")
+    print("This script is only for Debian/Ubuntu\n")
     sys.exit(1)
+
+subprocess.call("apt install net-tools -y")
 
 #check users.txt, cross reference with /etc/passwd, if any extra users.txt are found, print username.
 try:
@@ -34,11 +36,11 @@ for user in users:
 #check for unathorized admin users
 
 for admin in admins:
-    if admin not in subprocess.call("getent group sudo | cut -d: -f4", shell=True):
+    if admin not in subprocess.call("getent group sudo | cut -d: -f4"):
         print("Unauthorized admin user found: " + admin)
 
 #check for disallowed packages, I.E, hacking tools, etc.
-subprocess.call("apt list --installed > installed.txt", shell=True)
+subprocess.call("apt list --installed > installed.txt")
 try:
     with open("installed.txt") as f:
         installed = f.read().splitlines()
@@ -59,23 +61,24 @@ try:
         for package in packages:
             if package not in installed:
                 print("Package " + package + " not found")
-                subprocess.call("apt install " + package + " -y", shell=True)
+                subprocess.call("apt install " + package + " -y")
 except:
-    print("packages.txt not found")
+    print("packages.txt not found\n")
     sys.exit(1)
 
 #disable root login via ssh
+print("Disabling root login via ssh")
 subprocess.call("sed -i 's/PermitRootLogin yes/PermitRootLogin no/g' /etc/ssh/sshd_config", shell=True)
-subprocess.call("systemctl restart sshd", shell=True)
+subprocess.call("systemctl restart sshd")
 
 #check for open ports, if any are found, print port number
-subprocess.call("netstat -tulpn > ports.txt", shell=True)
+subprocess.call("netstat -tulpn > ports.txt")
 try:
     with open("ports.txt") as f:
         ports = f.read().splitlines()
         for port in ports:
             if "LISTEN" in port:
-                print("Port " + port + " is open")
+                print("Port " + port + " is open\n")
                 sys.exit(1)
 except:
     print("ports.txt not found")
@@ -92,11 +95,13 @@ subprocess.call(["apt", "upgrade", "-y"])
 #install ufw
 print("Installing ufw")
 subprocess.call(["apt", "install", "ufw", "-y"])
-subprocess.call(["ufw", "enable"], shell=True)
-subprocess.call(["ufw", "allow", "ssh"], shell=True)
-subprocess.call(["systemctl", "enable", "ufw"], shell=True)
+subprocess.call(["ufw", "enable"])
+subprocess.call(["ufw", "allow", "ssh"])
+subprocess.call(["systemctl", "enable", "ufw"])
 
 #find media files, if any are found, print file name and path
+print("Searching for media files\n")
+
 subprocess.call("locate *.mp3 > media.txt", shell=True)
 subprocess.call("locate *.mp4 > media.txt", shell=True)
 subprocess.call("locate *.webm > media.txt", shell=True)
