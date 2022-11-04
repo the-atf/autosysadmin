@@ -70,10 +70,10 @@ except:
 #disable root login via ssh
 print("Disabling root login via ssh")
 subprocess.call("sed -i 's/PermitRootLogin yes/PermitRootLogin no/g' /etc/ssh/sshd_config", shell=True)
-subprocess.call("systemctl restart sshd")
+subprocess.call("systemctl restart sshd", shell=True)
 
 #check for open ports, if any are found, print port number
-subprocess.call("netstat -tulpn > ports.txt")
+subprocess.call("netstat -tulpn > ports.txt", shell=True)
 try:
     with open("ports.txt") as f:
         ports = f.read().splitlines()
@@ -86,7 +86,7 @@ except:
     sys.exit(1)
 
 #run apt update
-print("Running apt update")
+print("Running apt update", shell=True)
 subprocess.call(["apt", "update"], shell=True)
 
 #run apt upgrade
@@ -95,10 +95,10 @@ subprocess.call(["apt", "upgrade", "-y"], shell=True)
 
 #install ufw
 print("Installing ufw")
-subprocess.call(["apt", "install", "ufw", "-y"], shell=True)
-subprocess.call(["ufw", "enable"], shell=True)
-subprocess.call(["ufw", "allow", "ssh"], shell=True)
-subprocess.call(["systemctl", "enable", "ufw"], shell=True)
+subprocess.call("apt install ufw -y", shell=True)
+subprocess.call("ufw enable", shell=True)
+subprocess.call("ufw allow ssh", shell=True)
+subprocess.call("systemctl enable ufw", shell=True)
 
 #find media files, if any are found, print file name and path
 print("Searching for media files\n")
@@ -120,8 +120,9 @@ except:
 
 #when done, install clamav and run clamscan
 print("Installing clamav")
-subprocess.call(["apt", "install", "clamav", "-y"], shell=True)
+subprocess.call("apt install clamav -y", shell=True)
 print("Running clamscan")
-subprocess.call(["clamscan", "-r", "/"], shell=True)
+subprocess.call("freshclam", shell=True)
+subprocess.call("clamscan -r /", shell=True)
 
 
