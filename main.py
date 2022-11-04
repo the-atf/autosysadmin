@@ -63,6 +63,7 @@ try:
                 print("Package " + package + " not found")
                 subprocess.call("apt install " + package + " -y")
 except:
+    print(exception)
     print("packages.txt not found\n")
     sys.exit(1)
 
