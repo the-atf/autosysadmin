@@ -16,7 +16,7 @@ else:
     print("This script is only for Debian/Ubuntu\n")
     sys.exit(1)
 
-subprocess.call("apt install net-tools -y")
+subprocess.call(["apt", "install", "net-tools", "-y"])
 
 #check users.txt, cross reference with /etc/passwd, if any extra users.txt are found, print username.
 try:
@@ -101,8 +101,6 @@ subprocess.call(["systemctl", "enable", "ufw"])
 
 #find media files, if any are found, print file name and path
 print("Searching for media files\n")
-
-
 
 subprocess.call("locate *.mp3 > media.txt", shell=True)
 subprocess.call("locate *.mp4 > media.txt", shell=True)
