@@ -55,17 +55,9 @@ except:
     sys.exit(1)
 
 #check packages.txt and install any missing packages
-try:
-    with open("packages.txt") as f:
-        packages = f.read().splitlines()
-        for package in packages:
-            if package not in installed:
-                print("Package " + package + " not found")
-                subprocess.call("apt install " + package + " -y", shell=True)
-except:
-    print(exception)
-    print("packages.txt not found\n")
-    sys.exit(1)
+packages = input("Enter packages to install: ")
+
+subprocess.call("apt install " + packages + " -y", shell=True)
 
 #disable root login via ssh
 print("Disabling root login via ssh")
